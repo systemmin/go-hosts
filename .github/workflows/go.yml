@@ -76,7 +76,7 @@ jobs:
 
       - name: Package Windows app
         run: |
-          fyne package -os windows -name go-hosts-v${{ env.VERSION }}-macos-window
+          fyne package -os windows -name go-hosts-v${{ env.VERSION }}-window
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
