@@ -1,0 +1,73 @@
+name: Build Fyne App (macOS & Windows)
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+
+  mac:
+    name: Build macOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.20"
+
+      - name: Install fyne
+        run: |
+          go install fyne.io/fyne/v2/cmd/fyne@latest
+
+      - name: Package macOS app
+        run: |
+          fyne package -os darwin -name go-hosts
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Create DMG
+        run: |
+          create-dmg MyApp-mac.dmg MyApp.app
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac
+          path: |
+            go-hosts.app
+            go-hosts.dmg
+
+
+  windows:
+    name: Build Windows App
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.20"
+
+      - name: Install fyne
+        run: |
+          go install fyne.io/fyne/v2/cmd/fyne@latest
+
+      - name: Package Windows app
+        run: |
+          fyne package -os windows -name go-hosts 
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: "*.exe"
