@@ -37,7 +37,7 @@ jobs:
 
       - name: Create DMG
         run: |
-          create-dmg MyApp-mac.dmg MyApp.app
+          create-dmg go-hosts.dmg go-hosts.app
 
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
