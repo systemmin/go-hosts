@@ -12,6 +12,9 @@ jobs:
     name: Build macOS App
     runs-on: macos-latest
 
+    env:
+      VERSION: 1.0.1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,7 +23,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.20"
-          
+
       - name: Ensure dependencies
         run: go mod tidy
         
@@ -30,27 +33,30 @@ jobs:
 
       - name: Package macOS app
         run: |
-          fyne package -os darwin -name go-hosts
+          fyne package -os darwin -name go-hosts-v${{ env.VERSION }}-macos11.0
 
       - name: Install create-dmg
         run: brew install create-dmg
 
       - name: Create DMG
         run: |
-          create-dmg go-hosts.dmg go-hosts.app
+          create-dmg --app-drop-link 450 200 "go-hosts-v${{ env.VERSION }}-macos11.0.dmg" "go-hosts-v${{ env.VERSION }}-macos11.0.app"
 
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
           name: mac
           path: |
-            go-hosts.app
-            go-hosts.dmg
+            go-hosts-v${{ env.VERSION }}-macos11.0.app
+            go-hosts-v${{ env.VERSION }}-macos11.0.dmg
 
 
   windows:
     name: Build Windows App
     runs-on: windows-latest
+
+    env:
+      VERSION: 1.0.1
 
     steps:
       - name: Checkout
@@ -70,7 +76,7 @@ jobs:
 
       - name: Package Windows app
         run: |
-          fyne package -os windows -name go-hosts 
+          fyne package -os windows -name go-hosts-v${{ env.VERSION }}-macos-window
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4

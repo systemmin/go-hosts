@@ -4,5 +4,5 @@ Website = "https://github.com/systemmin/go-hosts"
   Icon = "icon/Icon.png"
   Name = "go-hosts"
   ID = "go-hosts"
-  Version = "1.0.0"
-  Build = 1
+  Version = "1.0.1"
+  Build = 11
